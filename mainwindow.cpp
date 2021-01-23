@@ -76,13 +76,31 @@ void MainWindow::clean()
 //*****************************************************************************************************
 
 
+//
+void MainWindow::drawBigPixel(int x,int y)
+{
+    x=x-5;
+    y=y-5;
+
+    red=255;
+    green=0;
+    blue=0;
+
+    for(int i=0; i<=10; i++){
+        for (int j=0; j<=10; j++) {
+            drawPixel(x+i,y+j);
+        }
+
+    }
+
+}
 // rysuje krzywa beziera dla 4 punktow - 3go stopnia
-void MainWindow::draw_bezier(int x0, int y0)
+void MainWindow::draw_bezier()
 {
     int x,y;
 
     QTextStream(stdout) << x0<<y0 << " \n";
-    for (int t=0; t<=1; t+=0.1) {
+    for (float t=0; t<=1; t+=0.001) {
         x=qPow((1-t),3)*tab[0]+3*(qPow((1-t),2))*t*tab[2]+3*(1-t)*qPow(t,2)*tab[4]+qPow(t,3)*tab[6];
         y=qPow((1-t),3)*tab[1]+3*(qPow((1-t),2))*t*tab[3]+3*(1-t)*qPow(t,2)*tab[5]+qPow(t,3)*tab[7];
 
@@ -94,8 +112,6 @@ void MainWindow::draw_bezier(int x0, int y0)
     }
 
 }
-
-
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
@@ -109,7 +125,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             tab[counter] = tab[counter] - startX;
             tab[counter+1] = tab[counter+1] - startY;
 
-           // draw_bezier(tab[counter],tab[counter+1]);
+            drawBigPixel(tab[counter], tab[counter+1]);
 
             on_XChanged(tab[counter]);
             on_YChanged(tab[counter+1]);
@@ -119,7 +135,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
 
         if (counter >= 7) {
-             draw_bezier(tab[0],tab[1]);
+             draw_bezier();
         }
 
 
