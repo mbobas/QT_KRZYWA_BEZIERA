@@ -1,5 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+
+
 
 // Konstruktor
 MainWindow::MainWindow(QWidget *parent) :
@@ -19,6 +24,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // Tworzymy obiekt klasy QImage o wymiarach równych wymiarom ramki
     // Format_RGB32 to 32 bitowe RGB (z kanałem alfa ustawionym na wartość 255)
     img = new QImage(width, height, QImage::Format_RGB32);
+
+
+    //WYPELNIANIE TABLICY ORAZ DRUKOWANIE
+//    tabx[0]=0;
+//    taby[0]=0;
+   //QTextStream(stdout) <<
+
 }
 //*****************************************************************************************************
 
@@ -76,41 +88,95 @@ void MainWindow::clean()
 //*****************************************************************************************************
 
 
-//
-void MainWindow::drawBigPixel(int x,int y)
+//rysowanie kwadratu zamist punktu
+void MainWindow::drawBigPixel_or_move(int x,int y)
 {
-    x=x-5;
-    y=y-5;
+    x=x-5; // poczatek kwadratu x
+    y=y-5; // // poczatek kwadratu y
 
+    int veryfySamePixel = 0;
+
+
+    int sizeTabX = sizeof(tabx)/sizeof(tabx[0]);
+    int sizeTabY = sizeof(taby)/sizeof(taby[0]);
+
+    QTextStream(stdout) << "dlugosc tabX: " << sizeTabX;
+
+    //czerwony kolo kwadratu
     red=255;
     green=0;
     blue=0;
-
+    //weryfikacja punktow
     for(int i=0; i<=10; i++){
         for (int j=0; j<=10; j++) {
-            drawPixel(x+i,y+j);
+            //weryfikacja czy pixele sa w talicach
+            for (int k=0; k<=sizeTabX; k++) {
+            if ( tabx[k] == x+i && taby[k] == y+j) {
+                QTextStream(stdout) << "Czy pixel x:" << x+1 << " y:" << y+j << " jest w tabx lub taby?: TAK \n";
+                QTextStream(stdout) << "TABX["<<k<<"]: " << tabx[k] << "TABY["<<k<<"]: " << taby[k];
+                veryfySamePixel++;
+                red=0;
+                green=255;
+                blue=0;
+                drawPixel(x+i,y+j);
+                }
+            }
         }
+    }
 
+    //rysowanie kwadradu
+    for(int i=0; i<=10; i++){
+        for (int j=0; j<=10; j++) {
+
+//            drawPixel(x+i,y+j);
+            tabx[numberOfPixels] = x+i; //zapisywanie kazdego piksela do tablicy
+            taby[numberOfPixels] = y+i; //j/w
+            numberOfPixels++;
+//            red=255;
+//            green=0;
+//            blue=0;
+
+        }
     }
 
 }
+
+//rysowanie kwadratu zamist punktu
+void MainWindow::drawBigPixel(int x,int y)
+{
+    x=x-5; // poczatek kwadratu x
+    y=y-5; // // poczatek kwadratu y
+
+    //rysowanie kwadradu
+    for(int i=0; i<=10; i++){
+        for (int j=0; j<=10; j++) {
+            drawPixel(x+i,y+j);
+            tabx[numberOfPixels] = x+i; //zapisywanie kazdego piksela do tablicy
+            taby[numberOfPixels] = y+i; //j/w
+            numberOfPixels++;
+            red=255;
+            green=0;
+            blue=0;
+        }
+    }
+}
+
+
 // rysuje krzywa beziera dla 4 punktow - 3go stopnia
 void MainWindow::draw_bezier()
 {
     int x,y;
 
     QTextStream(stdout) << x0<<y0 << " \n";
+
+    //rysowanie krzywej Beizera 3go stopnia
     for (float t=0; t<=1; t+=0.001) {
         x=qPow((1-t),3)*tab[0]+3*(qPow((1-t),2))*t*tab[2]+3*(1-t)*qPow(t,2)*tab[4]+qPow(t,3)*tab[6];
         y=qPow((1-t),3)*tab[1]+3*(qPow((1-t),2))*t*tab[3]+3*(1-t)*qPow(t,2)*tab[5]+qPow(t,3)*tab[7];
 
         drawPixel(x,y);
 
-//        red=255;
-//        green=0;
-//        blue=0;
     }
-
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -118,6 +184,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         //counter = 0
         //pobieramy 4 punkty do tablicy.
         // Pobieramy współrzędne 4 punktow
+
+
+
         if (counter <= 7) {
             tab[counter] = event->x();
             tab[counter+1] = event->y();
@@ -332,6 +401,16 @@ void MainWindow::on_cleanButton_clicked()
 {
     clean();
     counter = 0;
+
+    int sizeTabX = sizeof(tabx)/sizeof(tabx[0]);
+    int sizeTabY = sizeof(taby)/sizeof(taby[0]);
+
+
+    for (int i=0; i<=sizeTabX; i++ ){
+        tabx[i]=0;
+        taby[i]=0;
+    }
+
     // Po zmodyfikowaniu obiektu QImage odświeżamy okno aplikacji, aby zobaczyc zmiany
     update();
 }

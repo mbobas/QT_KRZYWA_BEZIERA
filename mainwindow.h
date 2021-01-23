@@ -7,6 +7,8 @@
 #include <QMouseEvent>
 #include <QtMath>
 #include<QDebug>
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace Ui {
 class MainWindow;
@@ -72,6 +74,9 @@ private:
     int blue=255;
     int tab[100];
     //int taby[100];
+    int tabx[10000];  // wspolrzedne wszsytkic wsp x kwadratow kliknietych
+    int taby[10000];  // wspolrzedne wszytkich wsp y, kwadratow kliknietych
+    int numberOfPixels = 0; // ilosc kliknietych pixeli - laczne pole kwadratow
 
 
     void clean();
@@ -80,7 +85,7 @@ private:
    // void draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
     void draw_bezier();
     void drawBigPixel(int x,int y);
-
+    void drawBigPixel_or_move(int x,int y);
 };
 
 #endif // MAINWINDOW_H
