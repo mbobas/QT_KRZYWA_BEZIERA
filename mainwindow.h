@@ -65,15 +65,20 @@ private:
 
     QImage *img; 
     int width, height, startX, startY,x0, y0, x1, y1, x2, y2, x3, y3, option;
+    int counter = 0;
     double r =0;
     int red=255;
     int green=255;
     int blue=255;
+    int tab[100];
+    //int taby[100];
+
 
     void clean();
     void drawPixel(int x, int y);
     void draw_section(int x0, int y0, int x1, int y1);
-    void draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+   // void draw_bezier(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
+    void draw_bezier(int x0, int y0);
 
 };
 

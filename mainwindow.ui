@@ -190,12 +190,12 @@
       <rect>
        <x>20</x>
        <y>50</y>
-       <width>82</width>
+       <width>91</width>
        <height>17</height>
       </rect>
      </property>
      <property name="text">
-      <string>Usun Punkt</string>
+      <string>Przesuń punkt</string>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_3">
